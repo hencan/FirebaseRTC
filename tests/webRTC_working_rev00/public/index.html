@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Welcome to FirebaseRTC</title>
+    <link href="https://unpkg.com/material-components-web@latest/dist/material-components-web.min.css" rel="stylesheet">
+    <script src="https://unpkg.com/material-components-web@latest/dist/material-components-web.min.js"></script>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+
+    <!-- update the version number as needed -->
+    <!-- The core Firebase JS SDK is always required and must be listed first -->
+    <script src="https://www.gstatic.com/firebasejs/8.2.4/firebase-app.js"></script>
+    <!-- include only the Firebase features as you need -->
+    <script src="https://www.gstatic.com/firebasejs/8.2.4/firebase-firestore.js"></script>
+
+    <!-- initialize the SDK after all desired features are loaded -->
+    <script defer src="/__/firebase/init.js"></script>
+
+
+    <link rel="stylesheet" type="text/css" href="main.css">
+</head>
+
+<body>
+    <h1>Welcome to FirebaseRTC!</h1>
+    <div id="buttons">
+        <button class="mdc-button mdc-button--raised" id="cameraBtn">
+            <i class="material-icons mdc-button__icon" aria-hidden="true">perm_camera_mic</i>
+            <span class="mdc-button__label">Open camera & microphone</span>
+        </button>
+        <button class="mdc-button mdc-button--raised" disabled id="createBtn">
+            <i class="material-icons mdc-button__icon" aria-hidden="true">group_add</i>
+            <span class="mdc-button__label">Create room</span>
+        </button>
+        <button class="mdc-button mdc-button--raised" disabled id="joinBtn">
+            <i class="material-icons mdc-button__icon" aria-hidden="true">group</i>
+            <span class="mdc-button__label">Join room</span>
+        </button>
+        <button class="mdc-button mdc-button--raised" disabled id="hangupBtn">
+            <i class="material-icons mdc-button__icon" aria-hidden="true">close</i>
+            <span class="mdc-button__label">Hangup</span>
+        </button>
+    </div>
+    <div>
+        <span id="currentRoom"></span>
+    </div>
+    <div id="videos">
+        <video id="localVideo" muted autoplay playsinline></video>
+        <video id="remoteVideo" autoplay playsinline></video>
+    </div>
+    <div class="mdc-dialog" id="room-dialog" role="alertdialog" aria-modal="true" aria-labelledby="my-dialog-title"
+        aria-describedby="my-dialog-content">
+        <div class="mdc-dialog__container">
+            <div class="mdc-dialog__surface">
+                <h2 class="mdc-dialog__title" id="my-dialog-title">Join room</h2>
+                <div class="mdc-dialog__content" id="my-dialog-content">
+                    Enter ID for room to join:
+                    <div class="mdc-text-field">
+                        <input type="text" id="room-id" class="mdc-text-field__input">
+                        <label class="mdc-floating-label" for="my-text-field">Room ID</label>
+                        <div class="mdc-line-ripple"></div>
+                    </div>
+                </div>
+                <footer class="mdc-dialog__actions">
+                    <button type="button" class="mdc-button mdc-dialog__button" data-mdc-dialog-action="no">
+                        <span class="mdc-button__label">Cancel</span>
+                    </button>
+                    <button id="confirmJoinBtn" type="button" class="mdc-button mdc-dialog__button"
+                        data-mdc-dialog-action="yes">
+                        <span class="mdc-button__label">Join</span>
+                    </button>
+                </footer>
+            </div>
+        </div>
+        <div class="mdc-dialog__scrim"></div>
+    </div>
+    <script src="app.js"></script>
+
+    <!-- TODO: Add SDKs for Firebase products that you want to use
+         https://firebase.google.com/docs/web/setup#available-libraries -->
+    <script src="https://www.gstatic.com/firebasejs/8.2.4/firebase-analytics.js"></script>
+
+    <script>
+        // Your web app's Firebase configuration
+        // For Firebase JS SDK v7.20.0 and later, measurementId is optional
+        var firebaseConfig = {
+            apiKey: "AIzaSyCG3fibdYrF8EDoBZBr-GeakYuVYGu-j90",
+            authDomain: "fir-rtc-85c76.firebaseapp.com",
+            databaseURL: "https://fir-rtc-85c76-default-rtdb.europe-west1.firebasedatabase.app",
+            projectId: "fir-rtc-85c76",
+            storageBucket: "fir-rtc-85c76.appspot.com",
+            messagingSenderId: "786371445740",
+            appId: "1:786371445740:web:19f9177977c1e0e08eb6c9",
+            measurementId: "G-0Z1PB4YKQB"
+        };
+        // Initialize Firebase
+        firebase.initializeApp(firebaseConfig);
+        firebase.analytics();
+    </script>
+</body>
+
+</html>
