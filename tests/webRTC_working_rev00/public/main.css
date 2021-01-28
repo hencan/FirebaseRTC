@@ -52,8 +52,9 @@ body {}
         height: calc(100% - 10px);
     }
     .remoteVideo {
-        width: 100%;
+        width: 150%;
         height: auto;
+        transform: translateX(-10%);
     }
     .card-img-overlay {
         flex-direction: column;
