@@ -43,7 +43,13 @@ body {}
         min-width: 75px;
         height: 100px;
         border-radius: 5px;
-        z-index: 10;
+        z-index: 20;
+        overflow: hidden;
+    }
+    .localVideo {
+        width: 150%;
+        height: auto;
+        transform: translateX(-10%);
     }
     .cardRemoteVideo {
         top: 5px;
@@ -51,14 +57,17 @@ body {}
         width: calc(100% - 10px);
         height: calc(100% - 10px);
     }
+    .card-img {
+        overflow: hidden;
+    }
     .remoteVideo {
-        width: 150%;
-        height: auto;
-        transform: translateX(-10%);
+        height: 100vh;
+        transform: translateX(-25%);
     }
     .card-img-overlay {
         flex-direction: column;
         justify-content: flex-end;
+        z-index: 10;
     }
     #cameraBtn, #hangupBtn {
         width: 100%;
