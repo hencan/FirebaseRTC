@@ -1,4 +1,3 @@
-
 // const firebase = require("firebase");
 // Required for side-effects
 // require("firebase/firestore");
@@ -24,7 +23,7 @@ const configuration = {
 
 let peerConnection = null;
 let localStream = null;
-let remoteStream = null;
+let remoteStream = [];
 let roomId = null;
 
 function init() {
@@ -81,13 +80,13 @@ async function createRoom() {
   // Code for creating a room above
   document.querySelector('#copyBtn').disabled = false;
 
-  peerConnection.addEventListener('track', event => {
-    console.log('Got remote track:', event.streams[0]);
-    event.streams[0].getTracks().forEach(track => {
-      console.log('Add a track to the remoteStream:', track);
-      remoteStream.addTrack(track);
-    });
-  });
+  // peerConnection.addEventListener('track', event => {
+  //   console.log('Got remote track:', event.streams[0]);
+  //   event.streams[0].getTracks().forEach(track => {
+  //     console.log('Add a track to the remoteStream:', track);
+  //     remoteStream.addTrack(track);
+  //   });
+  // });
 
   // Listening for remote session description below
   roomRef.onSnapshot(async snapshot => {
@@ -128,9 +127,9 @@ function copyKey() {
   document.querySelector('#copyBtn').style.transition = "all .1s"
   document.querySelector('#copyBtn').classList.remove("btn-primary")
   document.querySelector('#copyBtn').classList.add("btn-success")
-  setTimeout(function() {
+  setTimeout(function () {
     document.querySelector('#copyBtn').classList.add("btn-primary")
-    document.querySelector('#copyBtn').classList.remove("btn-success")  
+    document.querySelector('#copyBtn').classList.remove("btn-success")
   }, 500)
 }
 
@@ -140,7 +139,7 @@ function joinRoom() {
 
   if (document.querySelector('#joinInput').value) {
     roomId = document.querySelector('#joinInput').value;
-    joinRoomById(roomId)  
+    joinRoomById(roomId)
   } else {
     alert("Insira a chave!")
   }
@@ -172,13 +171,13 @@ async function joinRoomById(roomId) {
     });
     // Code for collecting ICE candidates above
 
-    peerConnection.addEventListener('track', event => {
-      console.log('Got remote track:', event.streams[0]);
-      event.streams[0].getTracks().forEach(track => {
-        console.log('Add a track to the remoteStream:', track);
-        remoteStream.addTrack(track);
-      });
-    });
+    // peerConnection.addEventListener('track', event => {
+    //   console.log('Got remote track:', event.streams[0]);
+    //   event.streams[0].getTracks().forEach(track => {
+    //     console.log('Add a track to the remoteStream:', track);
+    //     remoteStream.addTrack(track);
+    //   });
+    // });
 
     // Code for creating SDP answer below
     const offer = roomSnapshot.data().offer;
@@ -211,13 +210,35 @@ async function joinRoomById(roomId) {
   }
 }
 
+function connectGroup() {
+  if (peerConnection) {
+    peerConnection.addEventListener('track', event => {
+      console.log('Got remote track:', event.streams);
+      for (var i = 0; i < event.length; i++) {
+        event.streams[i].getTracks().forEach(track => {
+          console.log('Add a track to the remoteStream:', track);
+          remoteStream[i] = new MediaStream();
+          remoteStream[i].addTrack(track);
+          document.getElementById("remoteVideo").appendChild(document.createElement("video").srcObject = remoteStream)
+        });
+      }
+    });
+  }
+}
+
 async function openUserMedia(e) {
   const stream = await navigator.mediaDevices.getUserMedia(
-    { video: true, audio: true });
+    // { video: true, audio: true }
+    {
+      video: { width: 150, height: 225 },
+      audio: true
+    }
+  );
   document.querySelector('#localVideo').srcObject = stream;
   localStream = stream;
-  remoteStream = new MediaStream();
-  document.querySelector('#remoteVideo').srcObject = remoteStream;
+
+  // remoteStream = new MediaStream();
+  // document.querySelector('#remoteVideo').srcObject = remoteStream;
 
   console.log('Stream:', document.querySelector('#localVideo').srcObject);
   document.querySelector('#cameraBtn').classList.remove("btn-primary")
@@ -291,3 +312,4 @@ function registerPeerConnectionListeners() {
 }
 
 init();
+window.requestAnimationFrame(connectGroup);
